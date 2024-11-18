@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>25-Space Board Game</title>
+    <style>
+        .board-space {
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .current-player {
+            background-color: yellow;
+        }
+
+        .player-character {
+            width: 30px;
+            height: 30px;
+        }
+
+        .board {
+            display: flex;
+            flex-wrap: wrap;
+            width: 300px;
+        }
+
+        .start-space {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>25-Space Board Game</h1>
+    <p>Player: {{ current_player.name }}</p>
+    <p>Current Position: {{ current_player.position + 1 }}</p> <!-- Add 1 to make it more intuitive (e.g., Start is 0, first space is 1) -->
+
+    <h2>Roll the Die</h2>
+    <a href="{{ url_for('roll_die_action') }}">
+        <img src="{{ url_for('static', filename='die.png') }}" alt="Roll the Die" style="cursor: pointer; width: 100px; height: 100px;">
+    </a>
+
+    <h3>Game Board:</h3>
+    <div class="board">
+        <div class="board-space start-space">Start</div>
+        {% for space in range(1, 26) %}
+            <div class="board-space">
+                {% for player in game.players %}
+                    {% if player.position == space - 1 %}
+                        <img src="{{ url_for('static', filename=player.character) }}" class="player-character" alt="Character">
+                    {% endif %}
+                {% endfor %}
+                {{ space }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3>Players:</h3>
+    <ul>
+        {% for player in game.players %}
+            <li>{{ player.name }} - Position: {{ player.position + 1 }} 
+                <img src="{{ url_for('static', filename=player.character) }}" class="player-character" alt="Character">
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if game.game_over %}
+        <h2>Game Over! {{ current_player.name }} wins!</h2>
+        <a href="{{ url_for('restart') }}">Restart Game</a>
+    {% else %}
+        <p>Next player's turn: {{ game.players[game.turn].name }}</p>
+    {% endif %}
+</body>
+</html>

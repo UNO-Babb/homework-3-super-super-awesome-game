@@ -3,59 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hexagon Tile Game</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        #board {
-            display: grid;
-            grid-template-columns: repeat(10, 60px);
-            grid-template-rows: repeat(10, 52px);
-            gap: 2px;
-        }
-        .hex {
-            width: 60px;
-            height: 52px;
-            background-color: lightgray;
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            transition: background-color 0.2s;
-        }
-    </style>
+    <title>25-Space Board Game</title>
 </head>
 <body>
+    <h1>Welcome to the 25-Space Board Game!</h1>
+    <form action="{{ url_for('start_game') }}" method="post">
+        <label for="num_players">Number of Players (2-4):</label>
+        <input type="number" id="num_players" name="num_players" min="2" max="4" required><br><br>
+        
+        <div id="player_names">
+            <label for="player1_name">Player 1 Name:</label>
+            <input type="text" id="player1_name" name="player1_name" required><br><br>
 
-<div id="board">
-    <!-- Hexagonal tiles will be added here on clicks -->
-</div>
+            <label for="player2_name">Player 2 Name:</label>
+            <input type="text" id="player2_name" name="player2_name" required><br><br>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Create an empty board of hex tiles
-        for (let i = 0; i < 100; i++) {
-            const hexTile = $('<div class="hex"></div>');
-            hexTile.data("clicked", false);  // Track if a tile has been clicked
-            $('#board').append(hexTile);
-        }
+            <label for="player3_name">Player 3 Name:</label>
+            <input type="text" id="player3_name" name="player3_name"><br><br>
 
-        // Add color to hex tiles on click
-        $('#board').on('click', '.hex', function() {
-            if (!$(this).data("clicked")) {  // Only allow one click per tile
-                $.getJSON('/add_tile', function(data) {
-                    $(this).css('background-color', data.color);
-                    $(this).data("clicked", true);  // Mark as clicked
-                }.bind(this));
-            }
-        });
-    });
-</script>
-
+            <label for="player4_name">Player 4 Name:</label>
+            <input type="text" id="player4_name" name="player4_name"><br><br>
+        </div>
+        
+        <input type="submit" value="Start Game">
+    </form>
 </body>
 </html>
